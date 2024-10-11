@@ -1,0 +1,22 @@
+name: Auto Minor Version Bump and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create new tag and GitHub release
+        run: |
+          git fetch --prune --unshallow || true
+          CURRENT_VERSION=$(git describe --tags --abbrev=0)
+          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{$NF += 1 ; print}')
+          gh release create $NEW_VERSION --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
