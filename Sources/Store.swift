@@ -10,12 +10,12 @@ import SwiftUI
 
 @Observable
 public final class Store {
-    public private(set) var groupID: String
+    public private(set) var groupID: String?
     public private(set) var productIDs: [String]
     public private(set) var product: Product?
 
     public init() {
-        groupID = ""
+        groupID = nil
         productIDs = []
         product = nil
         updateListenerTask = nil
@@ -23,7 +23,7 @@ public final class Store {
         purchasedSubscriptions = []
     }
 
-    public func open(groupID: String, productIDs: [String], purchasedSubscriptionsDidSet: (([Product]) -> Void)?) {
+    public func open(groupID: String?, productIDs: [String], purchasedSubscriptionsDidSet: (([Product]) -> Void)?) {
         self.groupID = groupID
         self.productIDs = productIDs
         self.purchasedSubscriptionsDidSet = purchasedSubscriptionsDidSet

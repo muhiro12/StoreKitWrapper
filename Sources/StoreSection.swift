@@ -16,8 +16,15 @@ struct StoreSection {
 
 extension StoreSection: View {
     var body: some View {
-        Section(content: {
-            SubscriptionStoreView(groupID: store.groupID)
+        Section(
+            content: {
+                Group {
+                    if let groupID = store.groupID {
+                        SubscriptionStoreView(groupID: groupID)
+                    } else {
+                        SubscriptionStoreView(productIDs: store.productIDs)
+                    }
+                }
                 .storeButton(.visible, for: .policies)
                 .storeButton(.visible, for: .restorePurchases)
                 .storeButton(.hidden, for: .cancellation)
@@ -26,8 +33,9 @@ extension StoreSection: View {
                     for: .termsOfService
                 )
                 .fixedSize(horizontal: false, vertical: true)
-        }, footer: {
-            Text(store.product?.description ?? "")
-        })
+            }, footer: {
+                Text(store.product?.description ?? "")
+            }
+        )
     }
 }
