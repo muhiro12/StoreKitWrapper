@@ -16,6 +16,11 @@ let package = Package(
         )
     ],
     targets: [
-        .target(name: "StoreKitWrapper")
+        .target(name: "StoreKitWrapper"),
+        .testTarget(
+            name: "StoreKitWrapperTests",
+            dependencies: ["StoreKitWrapper"],
+            path: "Tests"
+        )
     ]
 )
