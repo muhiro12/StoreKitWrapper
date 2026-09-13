@@ -29,8 +29,17 @@ It is withheld when metadata is missing for any verified purchased product.
 Callers that used this callback to grant access should adopt the identifier
 callback. The default subscription-section presentation is unchanged.
 
-The package tests inject catalog and entitlement responses to cover metadata
-failure, absent metadata, no purchases, verification failure, and cancelled or
-replaced observations, unconfigured startup, callback cancellation, and listener
-ownership. StoreKit testing with a hosted app is also needed for
-transaction delivery, expiry, restoration, and release-platform verification.
+The store rechecks current entitlements at the earliest verified subscription
+expiration date, even when no transaction update arrives. An elapsed date does
+not itself revoke access. If StoreKit still verifies the entitlement after that
+date, or verification fails during the recheck, the store retries after one
+minute. Reopening and closing cancel the previous scheduled recheck.
+
+The original three-argument `open` signature remains available, including typed
+function references and the labeled method reference. `Store()` and
+`buildSubscriptionSection()` remain callable from nonisolated factory code;
+observe and mutate the store on the main actor.
+
+See [Verification](Verification/README.md) for package regression tests and the
+hosted StoreKit scenarios covering catalog failures, natural expiration,
+refunds, observation lifecycle, and separate-process restarts.
