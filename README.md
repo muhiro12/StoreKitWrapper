@@ -5,7 +5,8 @@ and macOS.
 
 Use `Store` on the main actor. `open` replaces the previous observation;
 `close` cancels owned work and stops callbacks. Use the product identifier
-callback for access decisions:
+callback for access decisions. It is typed `@MainActor`, so an existing
+actor-isolated callback can be passed directly without an extra `Task`:
 
 ```swift
 store.open(

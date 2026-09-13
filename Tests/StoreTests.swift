@@ -24,13 +24,15 @@ final class StoreTests: XCTestCase {
             store.close()
         }
         var identities: Set<String>?
+        let receiveIdentifiers: @MainActor (Set<String>) -> Void = { identifiers in
+            MainActor.preconditionIsolated()
+            identities = identifiers
+        }
         var legacyCalled = false
         store.open(
             groupID: nil,
             productIDs: ["premium"],
-            purchasedProductIDsDidSet: { identifiers in
-                identities = identifiers
-            },
+            purchasedProductIDsDidSet: receiveIdentifiers,
             purchasedSubscriptionsDidSet: { _ in
                 legacyCalled = true
             })

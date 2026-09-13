@@ -21,7 +21,7 @@ public final class Store {
     private var products: [Product] = []
     private var hasResolvedEntitlements = false
     private var purchasedSubscriptionsDidSet: (([Product]) -> Void)?
-    private var purchasedProductIDsDidSet: ((Set<String>) -> Void)?
+    private var purchasedProductIDsDidSet: (@MainActor (Set<String>) -> Void)?
 
     nonisolated public init() {
         client = .live
@@ -46,12 +46,13 @@ public final class Store {
     }
 
     /// Starts observation. Reopening replaces the previous observation.
-    /// Use the identifier callback for access decisions; the legacy Product callback
+    /// The identifier callback runs on MainActor and accepts actor-isolated bridges directly.
+    /// Use it for access decisions; the legacy Product callback
     /// waits until metadata exists for every verified subscription.
     public func open(
         groupID: String?,
         productIDs: [String],
-        purchasedProductIDsDidSet: ((Set<String>) -> Void)?,
+        purchasedProductIDsDidSet: (@MainActor (Set<String>) -> Void)?,
         purchasedSubscriptionsDidSet: (([Product]) -> Void)?
     ) {
         close()

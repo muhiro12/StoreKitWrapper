@@ -8,6 +8,18 @@ entitlements, verification failures, observation replacement, immediate and
 in-flight cancellation, ownership, expiration rechecks, and the original
 consumer API signatures. Package tests can also run with `swift test` on macOS.
 
+## Swift 6 consumer compatibility
+
+Run `swift build --package-path Verification/Swift6Consumer` to compile the
+public API with Swift 6 checking. The fixture forwards an existing `@MainActor`
+identifier callback from a nonisolated factory, matching runtime adapter
+composition. Its returned bridge must be invoked on the main actor. It also
+checks async forwarding from outside the main actor and existing typed and
+labeled identifier observation references.
+
+The package metadata-failure test passes an explicitly actor-isolated callback
+and checks its executor during delivery.
+
 ## Hosted StoreKit scenarios
 
 Open `StoreKitHost/StoreKitHost.xcodeproj` and select `StoreKitHost` and
