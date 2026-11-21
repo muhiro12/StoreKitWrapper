@@ -68,6 +68,7 @@ public final class Store {
         guard !productIDs.isEmpty || groupID != nil else {
             return
         }
+        isLoading = true
         updateListenerTask = makeListener(observationID: generation)
         refreshTask = makeRefreshTask(observationID: generation, configuredProductIDs: productIDs)
     }
@@ -118,7 +119,6 @@ public final class Store {
             guard self?.isObserving(observationID) == true else {
                 return
             }
-            self?.isLoading = true
             // Access must not wait for a catalog request that may fail or stall.
             do {
                 let identifiers = try await client.currentEntitlements(Set(configuredProductIDs), groupID)

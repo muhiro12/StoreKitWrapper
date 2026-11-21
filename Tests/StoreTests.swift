@@ -301,7 +301,9 @@ final class StoreTests: XCTestCase {
                 }
             ))
         store.open(groupID: nil, productIDs: ["premium"], purchasedSubscriptionsDidSet: nil)
+        XCTAssertTrue(store.isLoading)
         store.close()
+        XCTAssertFalse(store.isLoading)
         try await Task.sleep(for: .milliseconds(50))
         XCTAssertFalse(store.isLoading)
     }
